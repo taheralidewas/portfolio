@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#eef3fb">
+<title>Taher Shajapurwala - Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    /* Light theme base */
+    --bg: #eef3fb;
+    --bg2: #ffffff;
+    --ink: #141334;          /* primary text */
+    --ink-soft: #3d3f63;     /* body text */
+
+    /* Bright accents, darkened just enough to stay readable on white */
+    --cyan: #0099b8;
+    --emerald: #04916a;
+    --violet: #7c3aed;
+    --rose: #e01b6f;
+    --amber: #d98300;
+    --blue: #2563eb;
+    --indigo: #4f46e5;
+    --lime: #5a9e00;
+    --orange: #ea5c0c;
+    --slate: #5d6180;
+
+    --card-surface: rgba(255, 255, 255, 0.74);
+    --border: rgba(20, 19, 52, 0.10);
+  }
+
+  html {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  body {
+    position: fixed;          /* stops iOS rubber-banding the whole page */
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;           /* keeps full height as mobile browser bars show/hide */
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+
+  /* ── Animated Background (light) ── */
+  .bg-animated {
+    position: fixed; inset: 0; z-index: -3;
+    background: linear-gradient(130deg, #eef3fb, #e5f6fb, #f3e9ff, #ffe9f2, #eaf0ff, #e8fbf2, #eef3fb);
+    background-size: 400% 400%;
+    animation: bgShift 24s ease infinite;
+  }
+  @keyframes bgShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .bg-blobs { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); opacity: 0.4;
+    mix-blend-mode: multiply;
+  }
+  .blob.b1 { width: 480px; height: 480px; background: #9fe8f5; top: -120px; left: -100px; animation: blobA 18s ease-in-out infinite; }
+  .blob.b2 { width: 420px; height: 420px; background: #ffc2dc; bottom: -140px; right: -80px; animation: blobB 22s ease-in-out infinite; }
+  .blob.b3 { width: 360px; height: 360px; background: #d7f5a8; top: 45%; left: 55%; animation: blobC 16s ease-in-out infinite; }
+  .blob.b4 { width: 300px; height: 300px; background: #ffe6a3; top: 10%; right: 12%; animation: blobA 20s ease-in-out infinite reverse; }
+
+  @keyframes blobA {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%  { transform: translate(180px, 120px) scale(1.25); }
+    66%  { transform: translate(60px, 260px) scale(0.85); }
+  }
+  @keyframes blobB {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(-220px, -160px) scale(1.35); }
+  }
+  @keyframes blobC {
+    0%,100% { transform: translate(-50%,-50%) scale(1); }
+    40% { transform: translate(-80%,-30%) scale(1.3); }
+    70% { transform: translate(-20%,-70%) scale(0.9); }
+  }
+
+  /* ── Animated grid sweep ── */
+  .bg-grid {
+    position: fixed; inset: -50%; z-index: -2; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(20,19,52,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(20,19,52,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 12s linear infinite;
+  }
+  @keyframes gridMove {
+    from { transform: translate3d(0,0,0); }
+    to   { transform: translate3d(60px,60px,0); }
+  }
+
+  /* ══════════════════════════════════════════
+     Animated Skill Background
+     Skill icon glyphs + rings behind the cards
+     ══════════════════════════════════════════ */
+  .skill-bg {
+    position: fixed; inset: 0; z-index: -1;
+    overflow: hidden; pointer-events: none;
+  }
+
+  /* Large translucent icon glyphs, slower and further back */
+  .sb-glyph {
+    position: absolute;
+    opacity: 0;
+    will-change: transform, opacity;
+    animation-name: sbFloatGlyph;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  @keyframes sbFloatGlyph {
+    0%   { transform: translate3d(0,0,0) rotate(0deg) scale(1); opacity: 0; }
+    15%  { opacity: 0.16; }
+    50%  { transform: translate3d(60px,-70px,0) rotate(18deg) scale(1.15); opacity: 0.22; }
+    85%  { opacity: 0.16; }
+    100% { transform: translate3d(0,0,0) rotate(0deg) scale(1); opacity: 0; }
+  }
+
+  /* Expanding rings that pulse out from behind the card */
+  .sb-ring {
+    position: absolute; border-radius: 50%;
+    border: 2px solid currentColor;
+    opacity: 0;
+    animation: sbRing 9s ease-out infinite;
+  }
+  @keyframes sbRing {
+    0%   { transform: scale(0.2); opacity: 0; }
+    18%  { opacity: 0.3; }
+    100% { transform: scale(1.9); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sb-glyph, .sb-ring, .blob, .bg-grid, .bg-animated { animation: none; }
+    .sb-glyph { opacity: 0.16; }
+  }
+
+  /* ── Noise Overlay ── */
+  .noise-overlay {
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.02;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Canvas ── */
+  #particle-canvas {
+    position: fixed; inset: 0; z-index: 0;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cyan), var(--lime), var(--amber), var(--rose));
+    box-shadow: 0 1px 10px rgba(0,153,184,0.45);
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── Card Counter ── */
+  .card-counter {
+    position: fixed; top: 24px; right: 32px; z-index: 100;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--slate);
+    display: flex; align-items: baseline; gap: 4px;
+    opacity: 0; transition: opacity 0.6s;
+  }
+  .card-counter.visible { opacity: 1; }
+  .card-counter .current { color: var(--cyan); font-size: 18px; font-weight: 700; }
+  .card-counter { font-weight: 600; }
+
+  /* ── Navigation Dots ── */
+  .nav-dots {
+    position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+    z-index: 100; display: flex; flex-direction: column; gap: 10px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(20,19,52,0.22); cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    border: none; padding: 0;
+  }
+  .nav-dot.active {
+    background: linear-gradient(180deg, var(--cyan), var(--rose));
+    height: 30px; border-radius: 4px;
+    box-shadow: 0 2px 12px -2px rgba(0,153,184,0.7);
+  }
+  .nav-dot:hover:not(.active) { background: var(--lime); box-shadow: 0 2px 8px -2px rgba(90,158,0,0.7); }
+
+  /* ── Cards Container ── */
+  .cards-container {
+    position: fixed; inset: 0; z-index: 1;
+    overflow: hidden;
+  }
+
+  /* ── Single Card ── */
+  .card {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 32px;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+  }
+
+  /* Cards enter from the RIGHT and exit to the LEFT */
+  .card.above     { transform: translateX(-110%) rotateY(12deg) scale(0.9); opacity: 0; pointer-events: none; }
+  .card.current   { transform: translateX(0) rotateY(0deg) scale(1); opacity: 1; pointer-events: auto; }
+  .card.below     { transform: translateX(110%) rotateY(-12deg) scale(0.9); opacity: 0; pointer-events: none; }
+  .card.exit-up   { transform: translateX(-110%) rotateY(12deg) scale(0.9); opacity: 0; pointer-events: none; }
+  .card.exit-down { transform: translateX(110%) rotateY(-12deg) scale(0.9); opacity: 0; pointer-events: none; }
+
+  .card-inner {
+    width: 100%; max-width: 900px; max-height: 85vh;
+    background: var(--card-surface);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 48px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 30px 70px -28px rgba(20,19,52,0.28),
+                0 10px 30px -18px rgba(0,153,184,0.18),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+
+  /* Animated accent ring on the active card */
+  .card.current .card-inner {
+    animation: cardRing 8s ease-in-out infinite;
+  }
+  @keyframes cardRing {
+    0%, 100% { border-color: rgba(0,153,184,0.45);  box-shadow: 0 30px 70px -28px rgba(20,19,52,0.28), 0 10px 34px -16px rgba(0,153,184,0.35),  inset 0 1px 0 rgba(255,255,255,0.9); }
+    33%      { border-color: rgba(224,27,111,0.45); box-shadow: 0 30px 70px -28px rgba(20,19,52,0.28), 0 10px 34px -16px rgba(224,27,111,0.32), inset 0 1px 0 rgba(255,255,255,0.9); }
+    66%      { border-color: rgba(90,158,0,0.45);   box-shadow: 0 30px 70px -28px rgba(20,19,52,0.28), 0 10px 34px -16px rgba(90,158,0,0.32),   inset 0 1px 0 rgba(255,255,255,0.9); }
+  }
+
+  /* Scrollable, but the scrollbar itself is hidden */
+  .card-inner::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  .card-inner {
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* legacy Edge/IE */
+  }
+
+  /* ── Card Glow ── */
+  .card-glow {
+    position: absolute; width: 300px; height: 300px; border-radius: 50%;
+    filter: blur(100px); opacity: 0.18; pointer-events: none; z-index: -1;
+    animation: glowPulse 6s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.14; }
+    50% { transform: scale(1.25); opacity: 0.24; }
+  }
+
+  /* ── Card Number ── */
+  .card-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 120px; font-weight: 800;
+    position: absolute; top: -20px; right: 24px;
+    opacity: 0.22; line-height: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(0,153,184,0.85), rgba(224,27,111,0.08));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Card Icon ── */
+  .card-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 24px;
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(20,19,52,0.08);
+    box-shadow: 0 10px 24px -10px currentColor;
+    animation: iconFloat 4s ease-in-out infinite;
+  }
+  @keyframes iconFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-4deg); }
+  }
+  .card-icon::after {
+    content: ''; position: absolute; inset: 0;
+    background: inherit; opacity: 0.15;
+  }
+
+  /* ── Card Title ── */
+  .card-title {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.03em;
+    margin-bottom: 8px; line-height: 1.2;
+  }
+
+  /* ── Card Subtitle ── */
+  .card-subtitle {
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 24px; opacity: 1; font-weight: 700; color: var(--lime);
+  }
+
+  /* ── Card Description ── */
+  .card-desc {
+    font-size: 15px; line-height: 1.75; color: var(--ink-soft);
+    margin-bottom: 28px; max-width: 600px;
+  }
+  .card-desc strong {
+    color: var(--cyan); font-weight: 800;
+  }
+
+  /* ── Tags ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .tag {
+    padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    background: rgba(20,19,52,0.04); border: 1px solid rgba(20,19,52,0.12);
+    color: var(--ink-soft); letter-spacing: 0.02em;
+    transition: all 0.3s;
+  }
+  .tag:hover {
+    background: linear-gradient(90deg, rgba(0,153,184,0.14), rgba(224,27,111,0.14));
+    border-color: rgba(0,153,184,0.45);
+    color: var(--ink); transform: translateY(-2px);
+    box-shadow: 0 6px 16px -8px rgba(0,153,184,0.6);
+  }
+
+  /* ── Closing Note ── */
+  .card-footer-note {
+    margin-top: 20px; padding: 14px 18px;
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(90deg, rgba(0,153,184,0.10), rgba(0,153,184,0));
+    font-size: 14px; line-height: 1.7; color: var(--ink-soft);
+  }
+
+  /* ── List Label ── */
+  .list-label {
+    font-size: 12px; font-weight: 800; letter-spacing: 2.5px;
+    text-transform: uppercase; margin: 22px 0 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .list-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, currentColor, transparent);
+    opacity: 0.5;
+  }
+
+  /* ── Project List ── */
+  .project-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  .project-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border-radius: 12px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(20,19,52,0.09);
+    transition: all 0.3s; cursor: default;
+  }
+  .project-item:hover {
+    background: linear-gradient(90deg, rgba(0,153,184,0.10), rgba(224,27,111,0.07));
+    border-color: rgba(0,153,184,0.4);
+    transform: translateX(-8px);
+    box-shadow: -6px 6px 18px -10px rgba(0,153,184,0.7);
+  }
+  .project-item .pi-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(20,19,52,0.04);
+  }
+  .project-item .pi-text {
+    font-size: 14px; color: var(--ink); font-weight: 500;
+  }
+  .project-item .pi-badge {
+    margin-left: auto; font-size: 10px; padding: 3px 10px;
+    border-radius: 6px; background: rgba(20,19,52,0.06);
+    color: var(--slate); font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; flex-shrink: 0;
+  }
+
+  /* ── Key Work Items ── */
+  .key-works { display: flex; flex-direction: column; gap: 10px; }
+  .key-work {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 14px; color: var(--ink-soft); line-height: 1.6;
+  }
+  .key-work i { margin-top: 4px; font-size: 10px; flex-shrink: 0; }
+
+  /* ── Stat Row ── */
+  .stat-row { display: flex; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-value {
+    font-size: 32px; font-weight: 800; letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .stat-label { font-size: 11px; color: var(--slate); text-transform: uppercase; letter-spacing: 1.5px; }
+
+  /* ── Scroll Arrow ── */
+  .scroll-arrow {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: none;
+  }
+  .scroll-arrow.visible { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .scroll-arrow i { color: var(--slate); font-size: 18px; animation: arrowBounce 1.5s ease-in-out infinite; }
+  .scroll-arrow span { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--slate); }
+
+  @keyframes arrowBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  /* ── Intro Card Special ── */
+  .intro-name {
+    font-size: 42px; font-weight: 900; letter-spacing: -0.04em;
+    margin-bottom: 4px; line-height: 1.1;
+    background: linear-gradient(120deg, #0099b8, #5a9e00, #d98300, #e01b6f, #7c3aed, #0099b8);
+    background-size: 300% 300%;
+    animation: bgShift 8s linear infinite;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .intro-role {
+    font-size: 16px; font-weight: 700; color: var(--cyan);
+    margin-bottom: 28px; letter-spacing: 0.02em;
+  }
+
+  .skill-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-top: 20px;
+  }
+  .skill-chip {
+    padding: 10px 14px; border-radius: 12px;
+    background: rgba(255,255,255,0.8); border: 1px solid rgba(20,19,52,0.10);
+    font-size: 12px; font-weight: 600; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.3s;
+  }
+  .skill-chip:hover {
+    background: linear-gradient(135deg, rgba(0,153,184,0.14), rgba(224,27,111,0.14));
+    border-color: rgba(0,153,184,0.4);
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 12px 22px -12px rgba(0,153,184,0.8);
+  }
+  .skill-chip i { font-size: 14px; }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════════ */
+
+  /* ── Tablet / small laptop ── */
+  @media (max-width: 1024px) {
+    .card { padding: 32px 24px; }
+    .card-inner { padding: 38px 32px; max-height: 88vh; }
+    .card-title { font-size: 25px; }
+    .intro-name { font-size: 36px; }
+  }
+
+  /* ── Mobile: the card becomes the whole page ── */
+  @media (max-width: 768px) {
+    /* Card fills the viewport edge to edge */
+    .card { padding: 0; align-items: stretch; }
+    .card-inner {
+      width: 100%; max-width: none;
+      height: 100%; max-height: none;
+      border-radius: 0;
+      border-left: none; border-right: none;
+      background: rgba(255,255,255,0.86);
+      /* room for the status bar / notch up top and the dot bar below */
+      padding: calc(env(safe-area-inset-top, 0px) + 54px)
+               20px
+               calc(env(safe-area-inset-bottom, 0px) + 72px)
+               20px;
+      box-shadow: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* The animated ring reads as a flicker at full bleed, so drop it */
+    .card.current .card-inner { animation: none; border-color: transparent; }
+
+    /* Slide fully off-screen: no gap at the edges */
+    .card.above, .card.exit-up     { transform: translateX(-100%) scale(1); }
+    .card.below, .card.exit-down   { transform: translateX(100%) scale(1); }
+    .card.current                  { transform: translateX(0) scale(1); }
+
+    /* Type scale */
+    .card-title { font-size: 23px; }
+    .card-subtitle { font-size: 11px; letter-spacing: 1.6px; margin-bottom: 20px; }
+    .card-desc { font-size: 14.5px; line-height: 1.7; max-width: none; }
+    /* The counter pill already shows the position, and this would sit under it */
+    .card-number { display: none; }
+    .card-icon { width: 46px; height: 46px; font-size: 18px; margin-bottom: 16px; }
+    .intro-name { font-size: 29px; }
+    .intro-role { font-size: 13.5px; margin-bottom: 22px; }
+    .stat-value { font-size: 26px; }
+    .stat-row { gap: 18px; margin-bottom: 22px; }
+    .list-label { font-size: 11px; letter-spacing: 1.8px; margin: 20px 0 10px; }
+    .project-item { padding: 12px 14px; }
+    .project-item .pi-text { font-size: 13.5px; }
+    .project-item .pi-badge { display: none; }
+    .project-item:hover { transform: none; }
+    .key-work { font-size: 13.5px; }
+    .card-footer-note { font-size: 13.5px; padding: 12px 14px; }
+    .skill-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .skill-chip { padding: 9px 11px; font-size: 11.5px; }
+    .skill-chip:hover { transform: none; box-shadow: none; }
+    .tag { font-size: 11.5px; padding: 5px 12px; }
+
+    /* Counter moves into a frosted pill so it stays legible over content */
+    .card-counter {
+      top: calc(env(safe-area-inset-top, 0px) + 12px);
+      right: 14px; left: auto;
+      padding: 5px 12px; border-radius: 999px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(20,19,52,0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .card-counter .current { font-size: 15px; }
+
+    /* Nav dots become a horizontal bar along the bottom */
+    .nav-dots {
+      right: auto; left: 50%; top: auto;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+      transform: translateX(-50%);
+      flex-direction: row; gap: 7px;
+      padding: 9px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(20,19,52,0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 6px 20px -10px rgba(20,19,52,0.35);
+      max-width: calc(100vw - 28px);
+    }
+    .nav-dot { width: 7px; height: 7px; }
+    .nav-dot.active { width: 26px; height: 7px; border-radius: 4px; }
+
+    /* Lighter background so text stays readable on a small screen */
+    .skill-bg { opacity: 0.55; }
+    .bg-grid { background-size: 44px 44px; }
+    .geo-shape { display: none; }
+  }
+
+  /* ── Small phones ── */
+  @media (max-width: 400px) {
+    .card-inner { padding-left: 16px; padding-right: 16px; }
+    .card-title { font-size: 21px; }
+    .intro-name { font-size: 25px; }
+    .skill-grid { grid-template-columns: 1fr; }
+    .stat-value { font-size: 23px; }
+    .card-desc { font-size: 14px; }
+  }
+
+  /* ── Phones in landscape: very little height to work with ── */
+  @media (max-width: 900px) and (max-height: 480px) {
+    .card-inner {
+      padding-top: calc(env(safe-area-inset-top, 0px) + 44px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 58px);
+    }
+    .nav-dots { bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); padding: 6px 10px; }
+    .card-icon { width: 38px; height: 38px; font-size: 16px; margin-bottom: 12px; }
+    .intro-name { font-size: 24px; }
+    .card-title { font-size: 20px; }
+  }
+
+  /* ── Loader ── */
+  .loader {
+    position: fixed; inset: 0; z-index: 10000;
+    background: var(--bg); display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+    transition: opacity 0.6s, visibility 0.6s;
+  }
+  .loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-spinner {
+    width: 32px; height: 32px; border: 3px solid rgba(20,19,52,0.10);
+    border-top-color: var(--cyan); border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .loader-text {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--slate);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Touch Ripple ── */
+  .touch-ripple {
+    position: fixed; width: 60px; height: 60px; border-radius: 50%;
+    border: 2px solid rgba(0,153,184,0.35); pointer-events: none; z-index: 50;
+    transform: translate(-50%, -50%) scale(0); opacity: 1;
+  }
+  .touch-ripple.active {
+    animation: rippleOut 0.6s ease-out forwards;
+  }
+  @keyframes rippleOut {
+    to { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  }
+
+  /* ── Floating geometric shapes ── */
+  .geo-shape {
+    position: fixed; z-index: -1; pointer-events: none; opacity: 0.3;
+  }
+  .geo-shape svg { width: 100%; height: 100%; }
+  .geo1 { top: 10%; left: 5%; width: 200px; height: 200px; animation: geoFloat1 20s ease-in-out infinite; }
+  .geo2 { bottom: 15%; right: 8%; width: 160px; height: 160px; animation: geoFloat2 25s ease-in-out infinite; }
+  .geo3 { top: 60%; left: 80%; width: 120px; height: 120px; animation: geoFloat3 18s ease-in-out infinite; }
+
+  @keyframes geoFloat1 {
+    0%, 100% { transform: rotate(0deg) translateY(0); }
+    33% { transform: rotate(120deg) translateY(-30px); }
+    66% { transform: rotate(240deg) translateY(20px); }
+  }
+  @keyframes geoFloat2 {
+    0%, 100% { transform: rotate(0deg) translateX(0); }
+    50% { transform: rotate(-180deg) translateX(40px); }
+  }
+  @keyframes geoFloat3 {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(90deg) scale(1.3); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-animated"></div>
+<div class="bg-grid"></div>
+<div class="bg-blobs">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+
+<!-- Animated Skill Background (populated by script) -->
+<div class="skill-bg" id="skillBg"></div>
+
+<div class="noise-overlay"></div>
+<canvas id="particle-canvas"></canvas>
+
+<!-- Floating Geometric Shapes -->
+<div class="geo-shape geo1"><svg viewBox="0 0 100 100"><polygon points="50,5 95,97 5,97" fill="none" stroke="#0099b8" stroke-width="1"/></svg></div>
+<div class="geo-shape geo2"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#5a9e00" stroke-width="1"/></svg></div>
+<div class="geo-shape geo3"><svg viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" fill="none" stroke="#e01b6f" stroke-width="1" transform="rotate(45 50 50)"/></svg></div>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Loading</div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+
+<!-- Card Counter -->
+<div class="card-counter" id="cardCounter">
+  <span class="current" id="counterCurrent">01</span>
+  <span>/</span>
+  <span id="counterTotal">11</span>
+</div>
+
+<!-- Navigation Dots -->
+<div class="nav-dots" id="navDots"></div>
+
+<!-- Touch Ripple -->
+<div class="touch-ripple" id="touchRipple"></div>
+
+<!-- Cards Container -->
+<div class="cards-container" id="cardsContainer"></div>
+
+<script>
+// ── Card Data ──
+const cards = [
+  {
+    type: 'intro',
+    icon: 'fas fa-laptop-code',
+    iconColor: 'var(--cyan)',
+    iconBg: 'rgba(0,153,184,0.12)',
+    glowColor: 'var(--cyan)',
+    title: 'Digital Solutions & Creative Technology',
+    subtitle: 'Professional Summary',
+    name: 'Taher Shajapurwala',
+    role: 'Web • Design • Creative • AI • Data',
+    paras: [
+      'A multi-disciplinary Digital Solutions &amp; Creative Technology professional with extensive experience working across web development, UI/UX design, graphic development, video production, printing solutions, social media management, AI automation, QA testing, and data analysis.',
+      'Since 2015, I have been involved in developing and supporting a wide range of digital, creative, and technology-driven projects, particularly for Talabulilm and Idarah initiatives. My experience includes developing websites and web applications from scratch, designing user interfaces and wireframes, creating graphic content and publications, managing social media, producing cinematic and promotional videos, and conducting complete website QA and testing.',
+      'I also develop custom automation tools and workflow solutions, including bulk QR generation, bulk messaging systems, and language conversion tools. Alongside technology and creative work, I provide complete printing solutions and material guidance as a Printable Advisor, helping with paper selection, GSM, finishing, and overall print quality.',
+      'With a combination of technical expertise, creative thinking, project understanding, and practical execution, I am able to manage projects from concept and design through development, testing, production, and final delivery.'
+    ],
+    skills: [
+      { icon: 'fas fa-code', label: 'Web Dev' },
+      { icon: 'fas fa-pen-nib', label: 'UI/UX' },
+      { icon: 'fas fa-palette', label: 'Graphics' },
+      { icon: 'fas fa-video', label: 'Video' },
+      { icon: 'fas fa-share-nodes', label: 'Social' },
+      { icon: 'fas fa-robot', label: 'AI Auto' },
+      { icon: 'fas fa-bug', label: 'QA Test' },
+      { icon: 'fas fa-chart-bar', label: 'Data' },
+      { icon: 'fas fa-print', label: 'Print' },
+    ]
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-globe',
+    iconColor: 'var(--cyan)',
+    iconBg: 'rgba(0,153,184,0.12)',
+    glowColor: 'var(--cyan)',
+    title: 'Web Development',
+    subtitle: 'Core Skill',
+    desc: 'Developed and managed 5+ websites and web-based platforms for Idarah, building them from scratch and handling the complete development process.',
+    stats: [{ value: '5+', label: 'Websites' }, { value: 'Full', label: 'Lifecycle' }],
+    listLabel: 'Projects Include',
+    projects: [
+      { name: 'DBEO Website', dot: 'var(--cyan)' },
+      { name: 'Talabulilm Homepage', dot: 'var(--emerald)' },
+      { name: 'Certification Module', dot: 'var(--violet)' },
+      { name: 'AQT – BS Sabaq', dot: 'var(--rose)' },
+      { name: 'Online Imtihaan Webpage', dot: 'var(--amber)' },
+      { name: 'Minhat Talimiyah – Old Gateway Page', dot: 'var(--blue)' },
+    ],
+    footer: 'From UI development and backend programming to database integration and deployment, I handle the complete web development lifecycle.',
+    tags: ['HTML/CSS', 'JavaScript', 'Backend', 'Database', 'Deployment', 'Responsive']
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-pen-nib',
+    iconColor: 'var(--violet)',
+    iconBg: 'rgba(124,58,237,0.12)',
+    glowColor: 'var(--violet)',
+    title: 'UI/UX Designer',
+    subtitle: 'Core Skill',
+    desc: 'Worked on UI/UX design and website wireframing for various Idarah projects, focusing on creating clear, user-friendly, and practical interfaces.',
+    listLabel: 'Projects Include',
+    projects: [
+      { name: 'Araiz', dot: 'var(--violet)' },
+      { name: 'Student Profile', dot: 'var(--cyan)' },
+      { name: 'Old Istibsaar', dot: 'var(--emerald)' },
+      { name: 'Website Wireframing &amp; User Flow Planning', dot: 'var(--rose)' },
+    ],
+    tags: ['Wireframing', 'User Flows', 'Prototyping', 'Interface Design', 'Usability']
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-palette',
+    iconColor: 'var(--rose)',
+    iconBg: 'rgba(224,27,111,0.12)',
+    glowColor: 'var(--rose)',
+    title: 'Graphic Development',
+    subtitle: 'Core Skill',
+    desc: 'Working in graphic design and creative development since 2016, creating visual content and creative materials for Talabulilm. I develop a wide range of creative posts, books, publications, promotional materials, and graphic elements, ensuring a consistent and engaging visual identity across Talabulilm initiatives.',
+    tags: ['Creative Posts', 'Books', 'Publications', 'Promotional Materials', 'Graphic Elements', 'Visual Identity']
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-share-nodes',
+    iconColor: 'var(--emerald)',
+    iconBg: 'rgba(4,145,106,0.12)',
+    glowColor: 'var(--emerald)',
+    title: 'Social Media Management',
+    subtitle: 'Core Skill',
+    desc: 'Manage the complete social media presence of Talabulilm, including content planning, regular posting, audience engagement, and campaign management. I also work on social media campaigns and promotional activities to improve visibility, engagement, and awareness of Talabulilm initiatives.',
+    tags: ['Content Strategy', 'Campaigns', 'Engagement', 'Analytics', 'Scheduling', 'Brand Awareness']
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-camera',
+    iconColor: 'var(--amber)',
+    iconBg: 'rgba(217,131,0,0.14)',
+    glowColor: 'var(--amber)',
+    title: 'Video and Photographer',
+    subtitle: 'Core Skill',
+    desc: 'Complete video production and photography coverage for Talabulilm events, workshops, and initiatives.',
+    listLabel: 'Talabulilm Video &amp; Production Work',
+    projects: [
+      { name: 'Short-form videos for Talabulilm from 2017', dot: 'var(--amber)' },
+      { name: 'Full shoot coverage of AQT and Sabaq', dot: 'var(--cyan)' },
+      { name: 'Talabulilm workshops and event coverage', dot: 'var(--emerald)' },
+      { name: 'Reel shoots and short promotional clips', dot: 'var(--rose)' },
+      { name: 'Complete event shoots for Talabulilm Centres', dot: 'var(--violet)' },
+      { name: 'Podcast shoots for Iqtesadiyah', dot: 'var(--blue)' },
+      { name: 'Full documentary production for Aelaam', dot: 'var(--indigo)' },
+    ],
+    tags: ['Cinematic', 'Events', 'Podcasts', 'Documentary', 'Reels', 'Promotional']
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-film',
+    iconColor: 'var(--rose)',
+    iconBg: 'rgba(224,27,111,0.12)',
+    glowColor: 'var(--rose)',
+    title: 'Video Editor & Creator',
+    subtitle: 'Core Skill',
+    desc: 'Currently working on <strong>video editing and content creation</strong>, handling a wide range of formats and creative requirements.',
+    listLabel: 'Current Work Includes',
+    projects: [
+      { name: 'Cinematic Video Editing', dot: 'var(--rose)' },
+      { name: 'VFX &amp; Visual Effects', dot: 'var(--cyan)' },
+      { name: 'Motion Graphics', dot: 'var(--lime)' },
+      { name: 'Promotional &amp; Social Media Videos', dot: 'var(--amber)' },
+      { name: 'Event &amp; Documentary Editing', dot: 'var(--violet)' },
+      { name: 'Creative Video Content', dot: 'var(--emerald)' },
+      { name: 'Short-form Reels &amp; Promotional Clips', dot: 'var(--orange)' },
+    ]
+  },
+  {
+    type: 'project',
+    icon: 'fas fa-robot',
+    iconColor: 'var(--emerald)',
+    iconBg: 'rgba(4,145,106,0.12)',
+    glowColor: 'var(--emerald)',
+    title: 'AI Automation Developer',
+    subtitle: 'Core Skill',
+    desc: 'I develop AI-powered automation tools and custom solutions using modern development approaches, including vibe coding, to simplify repetitive tasks and improve workflow efficiency.',
+    listLabel: 'Automation Projects Include',
+    projects: [
+      { name: 'Bulk QR Code Generator', dot: 'var(--emerald)', badge: 'Tool' },
+      { name: 'Bulk Message Sender', dot: 'var(--cyan)', badge: 'System' },
+      { name: 'English to Lisan al-Da&rsquo;wah (LSD) Converter', dot: 'var(--violet)', badge: 'Language' },
+      { name: 'Custom Workflow Automation', dot: 'var(--rose)', badge: 'Workflow' },
+    ],
+    tags: ['Vibe Coding', 'AI Tools', 'Automation', 'Custom Solutions', 'Workflow']
+  },
+  {
+    type: 'detail',
+    icon: 'fas fa-bug',
+    iconColor: 'var(--cyan)',
+    iconBg: 'rgba(0,153,184,0.12)',
+    glowColor: 'var(--cyan)',
+    title: 'QA Testing',
+    subtitle: 'Core Skill',
+    desc: 'Provide quality assurance and testing for websites and web applications, ensuring functionality, usability, and overall performance.',
+    listLabel: 'Key Work Includes',
+    keyWorks: [
+      'Complete QA testing of the Talabulilm website',
+      'Identifying and reporting bugs and issues',
+      'Functional and usability testing',
+      'Testing across different devices and scenarios',
+      'Preparing detailed QA reports for development and bug fixing'
+    ],
+    tags: ['Bug Reports', 'Functional Testing', 'Usability', 'Cross-Device', 'QA Reports']
+  },
+  {
+    type: 'detail',
+    icon: 'fas fa-chart-bar',
+    iconColor: 'var(--violet)',
+    iconBg: 'rgba(124,58,237,0.12)',
+    glowColor: 'var(--violet)',
+    title: 'Data Analyst',
+    subtitle: 'Core Skill',
+    desc: 'Worked on Talabulilm Araiz data analysis and reporting, preparing detailed insights and visual reports based on Jamaat-wise and Jamiat-wise data.',
+    listLabel: 'Key Work Includes',
+    keyWorks: [
+      'Data analysis and processing',
+      'Jamaat-wise &amp; Jamiat-wise reports',
+      'Graphical data visualization',
+      'Summary reports and insights',
+      'Data-driven reporting for better understanding and decision-making'
+    ],
+    tags: ['Analysis', 'Visualization', 'Reports', 'Insights', 'Decision Support']
+  },
+  {
+    type: 'detail',
+    icon: 'fas fa-print',
+    iconColor: 'var(--amber)',
+    iconBg: 'rgba(217,131,0,0.14)',
+    glowColor: 'var(--amber)',
+    title: 'Printable Advisor',
+    subtitle: 'Core Skill',
+    desc: 'I provide complete printing solutions for MHB Talabulilm, covering everything from printing to material selection. As a Printable Advisor, I also guide you on choosing the right paper, suitable GSM, and overall print quality to achieve the best possible result for each requirement.',
+    listLabel: 'Key Work Includes',
+    keyWorks: [
+      'Paper selection &amp; material guidance',
+      'GSM recommendations',
+      'Finishing &amp; print quality optimization',
+      'Complete printing solutions'
+    ],
+    products: ['Booklet', 'Badge', 'Idarah File', 'Tahyyo', 'All Printable Stationary'],
+    tags: ['Paper', 'GSM', 'Finishing', 'Quality', 'Materials']
+  }
+];
+
+// ── Build Cards ──
+const container = document.getElementById('cardsContainer');
+const navDotsEl = document.getElementById('navDots');
+
+cards.forEach((card, i) => {
+  // Create card element
+  const el = document.createElement('div');
+  el.className = `card ${i === 0 ? 'current' : 'below'}`;
+  el.dataset.index = i;
+
+  let content = '';
+
+  // Card number
+  content += `<div class="card-number">${String(i + 1).padStart(2, '0')}</div>`;
+  content += `<div class="card-glow" style="background:${card.glowColor};top:-80px;right:-80px;"></div>`;
+  content += `<div class="card-glow" style="background:${card.glowColor};bottom:-100px;left:-60px;opacity:0.06;"></div>`;
+
+  // Icon
+  content += `<div class="card-icon" style="background:${card.iconBg};"><i class="${card.icon}" style="color:${card.iconColor};position:relative;z-index:1;"></i></div>`;
+
+  if (card.type === 'intro') {
+    content += `<div class="intro-name">${card.name}</div>`;
+    content += `<div class="intro-role">${card.role}</div>`;
+  }
+
+  // Title & subtitle
+  content += `<div class="card-title" ${card.type === 'intro' ? 'style="font-size:20px;opacity:0.7;margin-bottom:16px;"' : ''}>${card.title}</div>`;
+  if (card.subtitle) content += `<div class="card-subtitle">${card.subtitle}</div>`;
+
+  // Description (single block or multiple paragraphs)
+  if (card.desc) content += `<div class="card-desc">${card.desc}</div>`;
+  if (card.paras) {
+    content += '<div class="card-desc">';
+    card.paras.forEach(p => { content += `<p style="margin-bottom:14px;">${p}</p>`; });
+    content += '</div>';
+  }
+
+  // Stats
+  if (card.stats) {
+    content += '<div class="stat-row">';
+    card.stats.forEach(s => {
+      content += `<div class="stat"><div class="stat-value" style="color:${card.iconColor}">${s.value}</div><div class="stat-label">${s.label}</div></div>`;
+    });
+    content += '</div>';
+  }
+
+  // Projects
+  if (card.projects) {
+    if (card.listLabel) content += `<div class="list-label" style="color:${card.iconColor}">${card.listLabel}</div>`;
+    content += '<div class="project-list">';
+    card.projects.forEach(p => {
+      content += `<div class="project-item"><div class="pi-dot" style="background:${p.dot}"></div><div class="pi-text">${p.name}</div>${p.badge ? `<div class="pi-badge">${p.badge}</div>` : ''}</div>`;
+    });
+    content += '</div>';
+  }
+
+  // Key Works
+  if (card.keyWorks) {
+    if (card.listLabel) content += `<div class="list-label" style="color:${card.iconColor}">${card.listLabel}</div>`;
+    content += '<div class="key-works">';
+    card.keyWorks.forEach(w => {
+      content += `<div class="key-work"><i class="fas fa-diamond" style="color:${card.iconColor}"></i><span>${w}</span></div>`;
+    });
+    content += '</div>';
+  }
+
+  // Products (for Printable Advisor)
+  if (card.products) {
+    content += `<div class="list-label" style="color:${card.iconColor}">Products To Provide</div>`;
+    content += '<div class="tags" style="margin-top:16px;">';
+    card.products.forEach(p => {
+      content += `<div class="tag" style="border-color:${card.iconColor}30;color:${card.iconColor};">${p}</div>`;
+    });
+    content += '</div>';
+  }
+
+  // Skills (for intro)
+  if (card.skills) {
+    content += `<div class="list-label" style="color:${card.iconColor}">Core Skills</div>`;
+    content += '<div class="skill-grid">';
+    card.skills.forEach(s => {
+      content += `<div class="skill-chip"><i class="${s.icon}" style="color:${card.iconColor}"></i>${s.label}</div>`;
+    });
+    content += '</div>';
+  }
+
+  // Closing note
+  if (card.footer) content += `<div class="card-footer-note">${card.footer}</div>`;
+
+  // Tags
+  if (card.tags) {
+    content += '<div class="tags" style="margin-top:20px;">';
+    card.tags.forEach(t => {
+      content += `<div class="tag">${t}</div>`;
+    });
+    content += '</div>';
+  }
+
+  el.innerHTML = `<div class="card-inner">${content}</div>`;
+  container.appendChild(el);
+
+  // Nav dot
+  const dot = document.createElement('button');
+  dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+  dot.dataset.index = i;
+  dot.addEventListener('click', () => goToCard(i));
+  navDotsEl.appendChild(dot);
+});
+
+document.getElementById('counterTotal').textContent = String(cards.length).padStart(2, '0');
+
+// ── Card Navigation ──
+let currentIndex = 0;
+let isAnimating = false;
+
+function goToCard(index) {
+  if (isAnimating || index === currentIndex || index < 0 || index >= cards.length) return;
+  isAnimating = true;
+
+  const direction = index > currentIndex ? 'up' : 'down';
+  const allCards = container.querySelectorAll('.card');
+  const allDots = navDotsEl.querySelectorAll('.nav-dot');
+
+  // Current card exits
+  allCards[currentIndex].className = `card ${direction === 'up' ? 'exit-up' : 'exit-down'}`;
+
+  // New card enters
+  allCards[index].className = 'card current';
+
+  // Other cards
+  allCards.forEach((c, i) => {
+    if (i !== index && i !== currentIndex) {
+      c.className = `card ${i < index ? 'above' : 'below'}`;
+    }
+  });
+
+  // Dots
+  allDots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+  currentIndex = index;
+
+  // Reset the incoming card to the top
+  const inner = allCards[index].querySelector('.card-inner');
+  if (inner) inner.scrollTop = 0;
+
+  updateUI();
+
+  setTimeout(() => { isAnimating = false; updateUI(); }, 800);
+}
+
+function nextCard() { goToCard(currentIndex + 1); }
+function prevCard() { goToCard(currentIndex - 1); }
+
+/* ──────────────────────────────────────────────
+   Where the pointer is decides what the wheel does:
+     over the card    -> scroll the card vertically
+     outside the card -> move between cards
+   ────────────────────────────────────────────── */
+const EDGE_TOLERANCE = 4;   // px slack when testing top/bottom
+
+function currentInner() {
+  const card = container.querySelectorAll('.card')[currentIndex];
+  return card ? card.querySelector('.card-inner') : null;
+}
+function isScrollable(inner) {
+  return !!inner && inner.scrollHeight - inner.clientHeight > EDGE_TOLERANCE;
+}
+function atBottom(inner) {
+  return inner.scrollTop + inner.clientHeight >= inner.scrollHeight - EDGE_TOLERANCE;
+}
+function atTop(inner) {
+  return inner.scrollTop <= EDGE_TOLERANCE;
+}
+
+/** True when the event happened over the card surface. */
+function isOverCard(e) {
+  return !!(e.target.closest && e.target.closest('.card-inner'));
+}
+
+function updateUI() {
+  // Progress
+  const progress = ((currentIndex + 1) / cards.length) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+
+  // Counter
+  document.getElementById('counterCurrent').textContent = String(currentIndex + 1).padStart(2, '0');
+}
+
+// ── Touch / Swipe ──
+let touchStartY = 0;
+let touchStartX = 0;
+let touchStartTime = 0;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+  touchStartX = e.touches[0].clientX;
+  touchStartTime = Date.now();
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  const deltaX = touchStartX - e.changedTouches[0].clientX;
+  const deltaY = touchStartY - e.changedTouches[0].clientY;
+  const elapsed = Date.now() - touchStartTime;
+
+  // Horizontal swipe always navigates. Drag left -> next card slides in from the right.
+  if (Math.abs(deltaX) > 50 && Math.abs(deltaY) < Math.abs(deltaX) && elapsed < 600) {
+    if (deltaX > 0) nextCard();
+    else prevCard();
+    return;
+  }
+
+  // Vertical swipe over the card just scrolls it (handled natively).
+  // Outside the card, a vertical swipe also changes card.
+  if (Math.abs(deltaY) > 60 && elapsed < 600 && !isOverCard(e)) {
+    if (deltaY > 0) nextCard();
+    else prevCard();
+  }
+}, { passive: true });
+
+// ── Mouse Wheel ──
+let wheelLock = false;
+function lockWheel() {
+  wheelLock = true;
+  setTimeout(() => { wheelLock = false; }, 800);
+}
+
+document.addEventListener('wheel', (e) => {
+  // Pointer over the card: leave it alone, the card scrolls natively.
+  if (isOverCard(e)) return;
+
+  // Pointer outside the card: the wheel changes card.
+  const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  if (Math.abs(delta) < 15 || wheelLock) return;
+  lockWheel();
+  if (delta > 0) nextCard(); else prevCard();
+}, { passive: true });
+
+// Keep the hint in sync while the card content is being scrolled
+container.addEventListener('scroll', (e) => {
+  if (e.target.classList && e.target.classList.contains('card-inner')) updateUI();
+}, true);
+
+// ── Keyboard ──
+document.addEventListener('keydown', (e) => {
+  const inner = currentInner();
+
+  // Left/Right arrows always change card
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextCard(); return; }
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); prevCard(); return; }
+
+  // Down/Up/Space scroll the card first, then move on
+  if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+    e.preventDefault();
+    if (isScrollable(inner) && !atBottom(inner)) {
+      inner.scrollBy({ top: e.key === 'ArrowDown' ? 120 : inner.clientHeight * 0.85, behavior: 'smooth' });
+      return;
+    }
+    nextCard();
+    return;
+  }
+  if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    e.preventDefault();
+    if (isScrollable(inner) && !atTop(inner)) {
+      inner.scrollBy({ top: e.key === 'ArrowUp' ? -120 : -inner.clientHeight * 0.85, behavior: 'smooth' });
+      return;
+    }
+    prevCard();
+    return;
+  }
+});
+
+/* ══════════════════════════════════════════════
+   Animated Skill Background
+   Oversized skill icon glyphs and pulsing accent
+   rings, floating gently behind the cards.
+   ══════════════════════════════════════════════ */
+const SKILL_BG = [
+  { label: 'Web Development',   icon: 'fas fa-code',         color: 'var(--cyan)' },
+  { label: 'UI/UX Design',      icon: 'fas fa-pen-nib',      color: 'var(--violet)' },
+  { label: 'Graphic Design',    icon: 'fas fa-palette',      color: 'var(--rose)' },
+  { label: 'Video Editing',     icon: 'fas fa-film',         color: 'var(--orange)' },
+  { label: 'Photography',       icon: 'fas fa-camera',       color: 'var(--amber)' },
+  { label: 'Motion Graphics',   icon: 'fas fa-wand-magic-sparkles', color: 'var(--indigo)' },
+  { label: 'Social Media',      icon: 'fas fa-share-nodes',  color: 'var(--emerald)' },
+  { label: 'AI Automation',     icon: 'fas fa-robot',        color: 'var(--lime)' },
+  { label: 'QA Testing',        icon: 'fas fa-bug',          color: 'var(--blue)' },
+  { label: 'Data Analysis',     icon: 'fas fa-chart-bar',    color: 'var(--violet)' },
+  { label: 'Printing Solutions',icon: 'fas fa-print',        color: 'var(--amber)' },
+  { label: 'VFX',               icon: 'fas fa-clapperboard', color: 'var(--rose)' },
+  { label: 'Wireframing',       icon: 'fas fa-vector-square',color: 'var(--cyan)' },
+  { label: 'Workflow Tools',    icon: 'fas fa-gears',        color: 'var(--emerald)' },
+];
+
+const skillBg = document.getElementById('skillBg');
+
+function buildSkillBackground() {
+  if (!skillBg) return;
+  skillBg.innerHTML = '';
+
+  const narrow = window.innerWidth < 768;
+  const glyphCount = narrow ? 5 : 9;
+  const ringCount  = narrow ? 2 : 4;
+
+  // Oversized translucent glyphs, slow float in place
+  for (let i = 0; i < glyphCount; i++) {
+    const s = SKILL_BG[Math.floor(Math.random() * SKILL_BG.length)];
+    const g = document.createElement('i');
+    g.className = `${s.icon} sb-glyph`;
+    g.style.color = s.color;
+    g.style.left = (Math.random() * 88) + '%';
+    g.style.top = (Math.random() * 82) + '%';
+    g.style.fontSize = (60 + Math.random() * 90).toFixed(0) + 'px';
+    g.style.animationDuration = (16 + Math.random() * 14).toFixed(1) + 's';
+    g.style.animationDelay = '-' + (Math.random() * 20).toFixed(1) + 's';
+    skillBg.appendChild(g);
+  }
+
+  // Pulsing accent rings
+  const ringColors = ['var(--cyan)', 'var(--rose)', 'var(--lime)', 'var(--amber)'];
+  for (let i = 0; i < ringCount; i++) {
+    const r = document.createElement('div');
+    r.className = 'sb-ring';
+    const size = 200 + Math.random() * 260;
+    r.style.width = size + 'px';
+    r.style.height = size + 'px';
+    r.style.color = ringColors[i % ringColors.length];
+    r.style.left = (Math.random() * 80) + '%';
+    r.style.top = (Math.random() * 75) + '%';
+    r.style.animationDelay = '-' + (Math.random() * 9).toFixed(1) + 's';
+    skillBg.appendChild(r);
+  }
+}
+
+buildSkillBackground();
+
+// Rebuild on resize so the glyph placement stays spread out
+let sbResize;
+window.addEventListener('resize', () => {
+  clearTimeout(sbResize);
+  sbResize = setTimeout(buildSkillBackground, 400);
+});
+
+// ── Particle Canvas ──
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); updateUI(); });
+
+const PARTICLE_COLORS = [
+  '0,153,184', '224,27,111', '90,158,0', '217,131,0', '124,58,237', '4,145,106'
+];
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2.2 + 0.6;
+    this.speedX = (Math.random() - 0.5) * 0.5;
+    this.speedY = (Math.random() - 0.5) * 0.5;
+    this.opacity = Math.random() * 0.35 + 0.12;
+    this.color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+
+  // Draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(${particles[i].color}, ${0.14 * (1 - dist / 120)})`;
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ── Init ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('cardCounter').classList.add('visible');
+    updateUI();
+  }, 800);
+});
+</script>
+</body>
+</html>
