@@ -1,8 +1,12 @@
-# Taher Shajapurwala — Portfolio
+# Taher Shajapurwala — Khidmat Portfolio
 
-A single-page card portfolio covering digital solutions and creative technology work:
-web development, UI/UX design, graphic development, video production and editing,
-social media, AI automation, QA testing, data analysis, and printing solutions.
+A single-page record of khidmat at Idarah and Talabulilm since 2015, presented as a deck
+of cards. It covers ten ongoing areas of responsibility: web development, UI/UX design,
+graphic development, video production, video editing, social media management,
+AI automation, QA testing, data analysis, and printing solutions.
+
+The final card consolidates the scope — years of service, number of work areas, and the
+count of named deliverables listed across the deck.
 
 ## Live site
 
