@@ -184,24 +184,6 @@
   .card-counter .current { color: var(--cyan); font-size: 18px; font-weight: 700; }
   .card-counter { font-weight: 600; }
 
-  /* ── Navigation Dots ── */
-  .nav-dots {
-    position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
-    z-index: 100; display: flex; flex-direction: column; gap: 10px;
-  }
-  .nav-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: rgba(20,19,52,0.22); cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    border: none; padding: 0;
-  }
-  .nav-dot.active {
-    background: linear-gradient(180deg, var(--cyan), var(--rose));
-    height: 30px; border-radius: 4px;
-    box-shadow: 0 2px 12px -2px rgba(0,153,184,0.7);
-  }
-  .nav-dot:hover:not(.active) { background: var(--lime); box-shadow: 0 2px 8px -2px rgba(90,158,0,0.7); }
-
   /* ── Cards Container ── */
   .cards-container {
     position: fixed; inset: 0; z-index: 1;
@@ -232,7 +214,13 @@
     border: 1px solid var(--border);
     border-radius: 24px;
     padding: 48px;
+    /* overflow-x must be explicit: with only overflow-y set, the other axis
+       computes to auto and the decorative glows (positioned outside the box)
+       make the card scroll sideways into empty space. */
+    overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    overflow-wrap: break-word;
     position: relative;
     box-shadow: 0 30px 70px -28px rgba(20,19,52,0.28),
                 0 10px 30px -18px rgba(0,153,184,0.18),
@@ -416,15 +404,79 @@
     50% { transform: translateY(6px); opacity: 1; }
   }
 
-  /* ── Intro Card Special ── */
+  /* ══════════════════════════════════════════
+     Intro Card — creative name treatment
+     ══════════════════════════════════════════ */
+
+  /* Small monospace kicker above the name */
+  .intro-kicker {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--slate); margin-bottom: 12px;
+    opacity: 0; animation: fadeUp 0.7s 0.1s ease-out forwards;
+  }
+  .intro-kicker .ik-line {
+    width: 26px; height: 2px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--rose));
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+
   .intro-name {
-    font-size: 42px; font-weight: 900; letter-spacing: -0.04em;
-    margin-bottom: 4px; line-height: 1.1;
-    background: linear-gradient(120deg, #0099b8, #5a9e00, #d98300, #e01b6f, #7c3aed, #0099b8);
-    background-size: 300% 300%;
-    animation: bgShift 8s linear infinite;
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: 0 16px;
+    font-size: 46px; font-weight: 900;
+    letter-spacing: -0.035em; line-height: 1.02;
+    margin-bottom: 12px;
+  }
+
+  .n-word { display: inline-flex; }
+
+  /* Each letter drops into place in sequence */
+  .n-ch {
+    display: inline-block;
+    opacity: 0;
+    animation: chIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes chIn {
+    from { opacity: 0; transform: translateY(0.45em) rotate(7deg) scale(0.88); }
+    to   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  }
+
+  /* First name: each letter takes the next accent colour.
+     Done per letter rather than with background-clip:text, because a
+     gradient clipped on the parent can drop out when children animate
+     their transform. */
+  .n-first .n-ch                  { color: var(--cyan); }
+  .n-first .n-ch:nth-child(6n+2)  { color: var(--violet); }
+  .n-first .n-ch:nth-child(6n+3)  { color: var(--rose); }
+  .n-first .n-ch:nth-child(6n+4)  { color: var(--amber); }
+  .n-first .n-ch:nth-child(6n+5)  { color: var(--emerald); }
+  .n-first .n-ch:nth-child(6n+6)  { color: var(--indigo); }
+
+  /* Surname: hollow outline, so the two halves contrast */
+  .n-last {
+    -webkit-text-stroke: 1.8px var(--ink);
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    letter-spacing: -0.02em;
+  }
+
+  /* Accent bar that draws itself in under the name */
+  .intro-rule {
+    --rule-w: 132px;
+    height: 5px; width: 0; border-radius: 99px; margin-bottom: 16px;
+    background: linear-gradient(90deg, var(--cyan), var(--rose), var(--amber));
+    animation: ruleIn 0.9s 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes ruleIn { to { width: var(--rule-w); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .n-ch, .intro-kicker { animation: none; opacity: 1; }
+    .intro-rule { animation: none; width: var(--rule-w); }
   }
   .intro-role {
     font-size: 16px; font-weight: 700; color: var(--cyan);
@@ -459,7 +511,7 @@
     .card { padding: 32px 24px; }
     .card-inner { padding: 38px 32px; max-height: 88vh; }
     .card-title { font-size: 25px; }
-    .intro-name { font-size: 36px; }
+    .intro-name { font-size: 38px; }
   }
 
   /* ── Mobile: the card becomes the whole page ── */
@@ -475,7 +527,7 @@
       /* room for the status bar / notch up top and the dot bar below */
       padding: calc(env(safe-area-inset-top, 0px) + 54px)
                20px
-               calc(env(safe-area-inset-bottom, 0px) + 72px)
+               calc(env(safe-area-inset-bottom, 0px) + 32px)
                20px;
       box-shadow: none;
       -webkit-overflow-scrolling: touch;
@@ -495,7 +547,10 @@
     /* The counter pill already shows the position, and this would sit under it */
     .card-number { display: none; }
     .card-icon { width: 46px; height: 46px; font-size: 18px; margin-bottom: 16px; }
-    .intro-name { font-size: 29px; }
+    .intro-name { font-size: 31px; gap: 0 10px; margin-bottom: 10px; }
+    .n-last { -webkit-text-stroke-width: 1.4px; }
+    .intro-kicker { font-size: 9.5px; letter-spacing: 3px; margin-bottom: 10px; }
+    .intro-rule { --rule-w: 98px; height: 4px; margin-bottom: 14px; }
     .intro-role { font-size: 13.5px; margin-bottom: 22px; }
     .stat-value { font-size: 26px; }
     .stat-row { gap: 18px; margin-bottom: 22px; }
@@ -523,23 +578,6 @@
     }
     .card-counter .current { font-size: 15px; }
 
-    /* Nav dots become a horizontal bar along the bottom */
-    .nav-dots {
-      right: auto; left: 50%; top: auto;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
-      transform: translateX(-50%);
-      flex-direction: row; gap: 7px;
-      padding: 9px 14px; border-radius: 999px;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(20,19,52,0.08);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 6px 20px -10px rgba(20,19,52,0.35);
-      max-width: calc(100vw - 28px);
-    }
-    .nav-dot { width: 7px; height: 7px; }
-    .nav-dot.active { width: 26px; height: 7px; border-radius: 4px; }
-
     /* Lighter background so text stays readable on a small screen */
     .skill-bg { opacity: 0.55; }
     .bg-grid { background-size: 44px 44px; }
@@ -550,7 +588,9 @@
   @media (max-width: 400px) {
     .card-inner { padding-left: 16px; padding-right: 16px; }
     .card-title { font-size: 21px; }
-    .intro-name { font-size: 25px; }
+    .intro-name { font-size: 26px; gap: 0 8px; }
+    .n-last { -webkit-text-stroke-width: 1.2px; }
+    .intro-rule { --rule-w: 82px; }
     .skill-grid { grid-template-columns: 1fr; }
     .stat-value { font-size: 23px; }
     .card-desc { font-size: 14px; }
@@ -560,11 +600,11 @@
   @media (max-width: 900px) and (max-height: 480px) {
     .card-inner {
       padding-top: calc(env(safe-area-inset-top, 0px) + 44px);
-      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 58px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
     }
-    .nav-dots { bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); padding: 6px 10px; }
     .card-icon { width: 38px; height: 38px; font-size: 16px; margin-bottom: 12px; }
-    .intro-name { font-size: 24px; }
+    .intro-name { font-size: 25px; }
+    .intro-kicker { display: none; }
     .card-title { font-size: 20px; }
   }
 
@@ -662,8 +702,6 @@
   <span id="counterTotal">11</span>
 </div>
 
-<!-- Navigation Dots -->
-<div class="nav-dots" id="navDots"></div>
 
 <!-- Touch Ripple -->
 <div class="touch-ripple" id="touchRipple"></div>
@@ -683,7 +721,7 @@ const cards = [
     title: 'Digital Solutions & Creative Technology',
     subtitle: 'Professional Summary',
     name: 'Taher Shajapurwala',
-    role: 'Web • Design • Creative • AI • Data',
+    role: 'Web • Design • Video Editor • Creative • AI • Data',
     paras: [
       'A multi-disciplinary Digital Solutions &amp; Creative Technology professional with extensive experience working across web development, UI/UX design, graphic development, video production, printing solutions, social media management, AI automation, QA testing, and data analysis.',
       'Since 2015, I have been involved in developing and supporting a wide range of digital, creative, and technology-driven projects, particularly for Talabulilm and Idarah initiatives. My experience includes developing websites and web applications from scratch, designing user interfaces and wireframes, creating graphic content and publications, managing social media, producing cinematic and promotional videos, and conducting complete website QA and testing.',
@@ -882,9 +920,27 @@ const cards = [
   }
 ];
 
+/**
+ * Splits a name into per-letter spans so each character can drop in
+ * on its own beat. First word gets the gradient fill, the rest are
+ * rendered as hollow outlines.
+ */
+function creativeName(full) {
+  const words = String(full).trim().split(/\s+/);
+  let n = 0;
+  return words.map((word, wi) => {
+    const cls = wi === 0 ? 'n-word n-first' : 'n-word n-last';
+    const letters = Array.from(word).map(ch => {
+      const delay = (0.18 + n * 0.045).toFixed(3);
+      n++;
+      return `<span class="n-ch" style="animation-delay:${delay}s">${ch}</span>`;
+    }).join('');
+    return `<span class="${cls}">${letters}</span>`;
+  }).join('');
+}
+
 // ── Build Cards ──
 const container = document.getElementById('cardsContainer');
-const navDotsEl = document.getElementById('navDots');
 
 cards.forEach((card, i) => {
   // Create card element
@@ -903,7 +959,9 @@ cards.forEach((card, i) => {
   content += `<div class="card-icon" style="background:${card.iconBg};"><i class="${card.icon}" style="color:${card.iconColor};position:relative;z-index:1;"></i></div>`;
 
   if (card.type === 'intro') {
-    content += `<div class="intro-name">${card.name}</div>`;
+    content += `<div class="intro-kicker"><span class="ik-line"></span>Hello, I&rsquo;m</div>`;
+    content += `<div class="intro-name">${creativeName(card.name)}</div>`;
+    content += `<div class="intro-rule"></div>`;
     content += `<div class="intro-role">${card.role}</div>`;
   }
 
@@ -982,13 +1040,6 @@ cards.forEach((card, i) => {
 
   el.innerHTML = `<div class="card-inner">${content}</div>`;
   container.appendChild(el);
-
-  // Nav dot
-  const dot = document.createElement('button');
-  dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
-  dot.dataset.index = i;
-  dot.addEventListener('click', () => goToCard(i));
-  navDotsEl.appendChild(dot);
 });
 
 document.getElementById('counterTotal').textContent = String(cards.length).padStart(2, '0');
@@ -1003,7 +1054,6 @@ function goToCard(index) {
 
   const direction = index > currentIndex ? 'up' : 'down';
   const allCards = container.querySelectorAll('.card');
-  const allDots = navDotsEl.querySelectorAll('.nav-dot');
 
   // Current card exits
   allCards[currentIndex].className = `card ${direction === 'up' ? 'exit-up' : 'exit-down'}`;
@@ -1017,9 +1067,6 @@ function goToCard(index) {
       c.className = `card ${i < index ? 'above' : 'below'}`;
     }
   });
-
-  // Dots
-  allDots.forEach((d, i) => d.classList.toggle('active', i === index));
 
   currentIndex = index;
 

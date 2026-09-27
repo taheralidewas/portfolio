@@ -1,0 +1,15 @@
+# OS cruft
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
+
+# Editor
+.vscode/
+.idea/
+
+# Backups / temp
+*.bak
+*.tmp
+*~
