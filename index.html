@@ -1202,21 +1202,36 @@ document.addEventListener('touchend', (e) => {
   }
 }, { passive: true });
 
-// ── Mouse Wheel ──
-let wheelLock = false;
-function lockWheel() {
-  wheelLock = true;
-  setTimeout(() => { wheelLock = false; }, 800);
-}
+/* ── Mouse Wheel ──
+   One gesture moves exactly one card.
+
+   A single trackpad flick or wheel spin fires a long stream of wheel
+   events. A simple time lock is not enough: as soon as it expires the
+   still-arriving events advance the next card, and the deck appears to
+   swipe by itself. So instead of timing the cards, we detect where one
+   gesture ends — a pause in the event stream — and allow only the first
+   event of each gesture to navigate. */
+const GESTURE_GAP_MS = 220;   // quiet period that marks the end of a gesture
+
+let lastWheelAt = 0;
+let gestureUsed = false;
 
 document.addEventListener('wheel', (e) => {
   // Pointer over the card: leave it alone, the card scrolls natively.
   if (isOverCard(e)) return;
 
-  // Pointer outside the card: the wheel changes card.
+  const now = Date.now();
+  // A long enough pause means the previous gesture finished and this is a new one.
+  if (now - lastWheelAt > GESTURE_GAP_MS) gestureUsed = false;
+  lastWheelAt = now;
+
+  // Already moved a card for this gesture: ignore the rest of its momentum.
+  if (gestureUsed) return;
+
   const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-  if (Math.abs(delta) < 15 || wheelLock) return;
-  lockWheel();
+  if (Math.abs(delta) < 15) return;
+
+  gestureUsed = true;
   if (delta > 0) nextCard(); else prevCard();
 }, { passive: true });
 
@@ -1229,9 +1244,10 @@ container.addEventListener('scroll', (e) => {
 document.addEventListener('keydown', (e) => {
   const inner = currentInner();
 
-  // Left/Right arrows always change card
-  if (e.key === 'ArrowRight') { e.preventDefault(); nextCard(); return; }
-  if (e.key === 'ArrowLeft')  { e.preventDefault(); prevCard(); return; }
+  // Left/Right arrows always change card.
+  // e.repeat guards against a held key marching through the deck.
+  if (e.key === 'ArrowRight') { e.preventDefault(); if (!e.repeat) nextCard(); return; }
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); if (!e.repeat) prevCard(); return; }
 
   // Down/Up/Space scroll the card first, then move on
   if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
