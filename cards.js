@@ -165,7 +165,7 @@ const cards = [
     iconBg: 'rgba(4,145,106,0.12)',
     glowColor: 'var(--emerald)',
     title: 'AI Automation Development',
-    subtitle: 'Responsibility • Since 2023',
+    subtitle: 'New skill',
     desc: 'Building AI-powered automation tools and custom in-house solutions that take repetitive manual work out of routine Idarah processes and shorten the time these tasks take.',
     stats: [
       { value: '4', label: 'Tools Built' },
@@ -228,7 +228,7 @@ const cards = [
     iconBg: 'rgba(217,131,0,0.14)',
     glowColor: 'var(--amber)',
     title: 'Printable Advisor',
-    subtitle: 'Own Business',
+    subtitle: 'Khidmat / Business',
     desc: 'Providing complete printing solutions for MHB Talabulilm, from print execution through to material selection — advising on the right paper, suitable GSM and finishing so each requirement is produced correctly the first time.',
     listLabel: 'Advisory Covered',
     keyWorks: [
