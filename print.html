@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Taher Shajapurwala — Khidmat Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --cyan: #0099b8; --emerald: #04916a; --violet: #7c3aed; --rose: #e01b6f;
+    --amber: #d98300; --blue: #2563eb; --indigo: #4f46e5; --lime: #5a9e00;
+    --orange: #ea5c0c; --ink: #141334; --ink-soft: #3d3f63; --slate: #5d6180;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page { size: A4; margin: 16mm 14mm; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: 'Inter', sans-serif; color: var(--ink);
+    background: #fff; line-height: 1.6; font-size: 11pt;
+  }
+
+  strong { color: var(--cyan); font-weight: 700; }
+
+  /* ── Cover ── */
+  .cover {
+    min-height: calc(100vh - 32mm);
+    display: flex; flex-direction: column; justify-content: center;
+    page-break-after: always; position: relative;
+    border: 2px solid rgba(20,19,52,0.08); border-radius: 16px;
+    padding: 40px; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0.5;
+    background:
+      radial-gradient(380px circle at 85% 12%, rgba(0,153,184,0.14), transparent 60%),
+      radial-gradient(340px circle at 10% 88%, rgba(224,27,111,0.12), transparent 60%),
+      radial-gradient(300px circle at 60% 60%, rgba(90,158,0,0.10), transparent 60%);
+  }
+  .cover-kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 10pt;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--slate);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .cover-kicker::before { content: ''; width: 30px; height: 2px; background: linear-gradient(90deg, var(--cyan), var(--rose)); }
+  .cover-name {
+    font-size: 44pt; font-weight: 900; letter-spacing: -0.03em; line-height: 1.02;
+    margin-bottom: 10px;
+  }
+  .cover-name .first { color: var(--cyan); }
+  .cover-name .last { -webkit-text-stroke: 1.4px var(--ink); color: transparent; }
+  .cover-rule { height: 5px; width: 130px; border-radius: 99px; margin: 10px 0 22px;
+    background: linear-gradient(90deg, var(--cyan), var(--rose), var(--amber)); }
+  .cover-role { font-size: 13pt; font-weight: 600; color: var(--cyan); margin-bottom: 28px; }
+  .cover-stats { display: flex; gap: 40px; margin-bottom: 30px; }
+  .cover-stat .v { font-size: 26pt; font-weight: 800; line-height: 1; }
+  .cover-stat .l { font-size: 9pt; text-transform: uppercase; letter-spacing: 1.5px; color: var(--slate); margin-top: 6px; }
+  .cover-note { font-size: 10.5pt; color: var(--ink-soft); max-width: 70%; }
+  .cover-foot {
+    position: absolute; bottom: 30px; left: 40px; right: 40px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 9pt; color: var(--slate);
+    border-top: 1px solid rgba(20,19,52,0.1); padding-top: 12px;
+  }
+
+  /* ── Section (one per card) ── */
+  .section {
+    page-break-inside: avoid; break-inside: avoid;
+    border: 1px solid rgba(20,19,52,0.1); border-radius: 14px;
+    padding: 26px 30px; margin-bottom: 20px;
+    position: relative; background: #fff;
+  }
+  .sec-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+  .sec-icon {
+    width: 46px; height: 46px; border-radius: 11px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    border: 1px solid rgba(20,19,52,0.08);
+  }
+  .sec-no {
+    font-family: 'JetBrains Mono', monospace; font-size: 10pt;
+    color: var(--slate); margin-left: auto; flex-shrink: 0;
+  }
+  .sec-title { font-size: 18pt; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .sec-sub { font-size: 8.5pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+  .sec-body p { color: var(--ink-soft); margin-bottom: 10px; font-size: 10.5pt; }
+
+  .stat-row { display: flex; gap: 32px; margin: 4px 0 16px; }
+  .stat .v { font-size: 20pt; font-weight: 800; line-height: 1; }
+  .stat .l { font-size: 8pt; text-transform: uppercase; letter-spacing: 1.2px; color: var(--slate); margin-top: 4px; }
+
+  .list-label {
+    font-size: 8.5pt; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+    margin: 16px 0 9px; display: flex; align-items: center; gap: 9px;
+  }
+  .list-label::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.3; }
+
+  .proj { display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    border: 1px solid rgba(20,19,52,0.08); border-radius: 9px; margin-bottom: 7px; font-size: 10pt; }
+  .proj .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .proj .badge { margin-left: auto; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--slate); background: rgba(20,19,52,0.05); padding: 2px 8px; border-radius: 5px; }
+
+  .kw { display: flex; align-items: flex-start; gap: 10px; font-size: 10pt; color: var(--ink-soft); margin-bottom: 7px; }
+  .kw i { font-size: 7pt; margin-top: 5px; flex-shrink: 0; }
+
+  .footer-note {
+    margin-top: 14px; padding: 11px 14px; border-left: 3px solid var(--cyan);
+    border-radius: 0 9px 9px 0; background: rgba(0,153,184,0.06);
+    font-size: 9.5pt; color: var(--ink-soft);
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag { font-size: 8.5pt; font-weight: 600; padding: 4px 11px; border-radius: 99px;
+    background: rgba(20,19,52,0.04); border: 1px solid rgba(20,19,52,0.1); color: var(--ink-soft); }
+
+  .skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .skill-chip { display: flex; align-items: center; gap: 8px; font-size: 9.5pt; font-weight: 600;
+    padding: 8px 11px; border: 1px solid rgba(20,19,52,0.1); border-radius: 10px; }
+
+  .areas-head {
+    font-family: 'JetBrains Mono', monospace; font-size: 10pt; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--slate); margin: 6px 0 14px;
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+<div id="doc"></div>
+
+<script src="cards.js"></script>
+<script>
+  const dec = s => String(s == null ? '' : s)
+    .replace(/&amp;/g,'&').replace(/&rsquo;/g,'\u2019')
+    .replace(/&lsquo;/g,'\u2018').replace(/&quot;/g,'"');
+  // keep <strong> tags: decode entities but not angle brackets
+  const rich = s => String(s == null ? '' : s)
+    .replace(/&amp;/g,'&').replace(/&rsquo;/g,'\u2019');
+
+  const doc = document.getElementById('doc');
+  let html = '';
+
+  const intro = cards[0];
+
+  // ── Cover ──
+  const nm = intro.name.trim().split(/\s+/);
+  html += `<section class="cover">
+    <div class="cover-kicker">Khidmat Portfolio</div>
+    <div class="cover-name"><span class="first">${nm[0]}</span> <span class="last">${nm.slice(1).join(' ')}</span></div>
+    <div class="cover-rule"></div>
+    <div class="cover-role">${dec(intro.role)}</div>
+    <div class="cover-stats">
+      ${(intro.stats||[]).map(s=>`<div class="cover-stat"><div class="v" style="color:var(--cyan)">${dec(s.value)}</div><div class="l">${dec(s.label)}</div></div>`).join('')}
+    </div>
+    <div class="cover-note">${rich(intro.paras[0])}</div>
+    <div class="cover-foot">
+      <span>Record of khidmat at Idarah &amp; Talabulilm since 2015</span>
+      <span>taheralidewas.github.io/portfolio</span>
+    </div>
+  </section>`;
+
+  // ── One section per card ──
+  cards.forEach((c, i) => {
+    const col = c.iconColor;
+    const no = String(i).padStart(2,'0'); // intro is cover; sections start at 01 visually below
+    html += `<section class="section">`;
+
+    html += `<div class="sec-head">
+      <div class="sec-icon" style="background:${c.iconBg};color:${col}"><i class="${c.icon}"></i></div>
+      <div>
+        <div class="sec-title">${dec(c.title)}</div>
+        ${c.subtitle ? `<div class="sec-sub" style="color:${col}">${dec(c.subtitle)}</div>` : ''}
+      </div>
+      <div class="sec-no">${String(i+1).padStart(2,'0')} / ${String(cards.length).padStart(2,'0')}</div>
+    </div>`;
+
+    html += `<div class="sec-body">`;
+
+    if (c.paras) c.paras.forEach(p => html += `<p>${rich(p)}</p>`);
+    if (c.desc) html += `<p>${rich(c.desc)}</p>`;
+
+    if (c.stats && c.type !== 'intro') {
+      html += `<div class="stat-row">` +
+        c.stats.map(s=>`<div class="stat"><div class="v" style="color:${col}">${dec(s.value)}</div><div class="l">${dec(s.label)}</div></div>`).join('') +
+        `</div>`;
+    }
+
+    if (c.skills) {
+      html += `<div class="list-label" style="color:${col}">Areas Covered</div>`;
+      html += `<div class="skill-grid">` +
+        c.skills.map(s=>`<div class="skill-chip"><i class="${s.icon}" style="color:${col}"></i>${dec(s.label)}</div>`).join('') +
+        `</div>`;
+    }
+
+    if (c.listLabel && (c.projects || c.keyWorks)) html += `<div class="list-label" style="color:${col}">${dec(c.listLabel)}</div>`;
+
+    if (c.projects) c.projects.forEach(p =>
+      html += `<div class="proj"><span class="dot" style="background:${p.dot}"></span><span>${dec(p.name)}</span>${p.badge?`<span class="badge">${dec(p.badge)}</span>`:''}</div>`);
+
+    if (c.keyWorks) c.keyWorks.forEach(w =>
+      html += `<div class="kw"><i class="fas fa-diamond" style="color:${col}"></i><span>${dec(w)}</span></div>`);
+
+    if (c.products) {
+      html += `<div class="list-label" style="color:${col}">Products Provided</div><div class="tags">` +
+        c.products.map(p=>`<span class="tag" style="border-color:${col};color:${col}">${dec(p)}</span>`).join('') + `</div>`;
+    }
+
+    if (c.footer) html += `<div class="footer-note" style="border-left-color:${col};background:${hexFade(col)}">${rich(c.footer)}</div>`;
+
+    if (c.tags) html += `<div class="tags">` + c.tags.map(t=>`<span class="tag">${dec(t)}</span>`).join('') + `</div>`;
+
+    html += `</div></section>`;
+  });
+
+  function hexFade() { return 'rgba(0,153,184,0.05)'; }
+
+  doc.innerHTML = html;
+</script>
+</body>
+</html>

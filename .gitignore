@@ -13,3 +13,8 @@ $RECYCLE.BIN/
 *.bak
 *.tmp
 *~
+
+# Generated PDF export and its build intermediates
+*.pdf
+_preview.png
+cards.json
