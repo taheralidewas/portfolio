@@ -14,7 +14,6 @@ $RECYCLE.BIN/
 *.tmp
 *~
 
-# Generated PDF export and its build intermediates
-*.pdf
+# Build intermediates (the PDF itself is tracked, see below)
 _preview.png
 cards.json
