@@ -5,8 +5,8 @@ of cards. It covers ten ongoing areas of responsibility: web development, UI/UX 
 graphic development, video production, video editing, social media management,
 AI automation, QA testing, data analysis, and printing solutions.
 
-The final card consolidates the scope — years of service, number of work areas, and the
-count of named deliverables listed across the deck.
+The opening card carries the overall scope — years of service, number of work areas, and
+the count of named deliverables listed across the deck.
 
 ## Live site
 
