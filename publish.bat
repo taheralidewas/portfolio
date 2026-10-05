@@ -24,25 +24,26 @@ echo [1/4] Regenerating the PDF from the current content...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0build-pdf.ps1"
 echo.
 
-REM --- 3. Show what changed ---
-echo [2/4] Changes to be published:
+REM --- 3. Stage the known project files by name.
+REM     Explicit names (never "git add -A") so a missing or failed
+REM     PDF build can never stage a deletion of the committed PDF.
+echo [2/4] Staging changes...
+git add index.html cards.js print.html build-pdf.ps1 publish.bat README.md .gitignore .nojekyll
+if exist "Taher_Shajapurwala_Portfolio.pdf" git add Taher_Shajapurwala_Portfolio.pdf
+echo.
+
+echo [3/4] Changes to be published:
 git status --short
 echo.
 
-REM --- 4. Stop if there is nothing to publish ---
-git diff --quiet --cached
-set CACHED=%errorlevel%
-git diff --quiet
-set UNSTAGED=%errorlevel%
-git ls-files --others --exclude-standard --error-unmatch . >nul 2>&1
-if "%CACHED%"=="0" if "%UNSTAGED%"=="0" (
+REM --- 4. Stop if nothing is staged ---
+git diff --cached --quiet
+if not errorlevel 1 (
   echo Nothing has changed since the last publish. Done.
   goto :done
 )
 
-REM --- 5. Stage, commit, push ---
-echo [3/4] Staging and committing...
-git add -A
+REM --- 5. Commit and push ---
 set STAMP=%date% %time%
 git commit -m "Update portfolio - %STAMP%"
 echo.
