@@ -351,13 +351,26 @@
     background: rgba(255,255,255,0.7);
     border: 1px solid rgba(20,19,52,0.09);
     transition: all 0.3s; cursor: default;
+    text-decoration: none;
   }
-  .project-item:hover {
-    background: linear-gradient(90deg, rgba(0,153,184,0.10), rgba(224,27,111,0.07));
-    border-color: rgba(0,153,184,0.4);
-    transform: translateX(-8px);
+  /* Linked rows are clickable and signal it on hover */
+  .project-item.has-link { cursor: pointer; }
+  .project-item.has-link:hover {
+    background: linear-gradient(90deg, rgba(0,153,184,0.12), rgba(224,27,111,0.07));
+    border-color: rgba(0,153,184,0.45);
+    transform: translateX(-6px);
     box-shadow: -6px 6px 18px -10px rgba(0,153,184,0.7);
   }
+  .project-item.has-link:hover .pi-text { color: var(--cyan); }
+  .project-item.has-link:hover .pi-link { opacity: 1; transform: translate(0, 0); }
+  .project-item .pi-link {
+    margin-left: auto; flex-shrink: 0;
+    font-size: 11px; color: var(--cyan);
+    opacity: 0.55; transition: all 0.3s;
+    transform: translate(-2px, 2px);
+  }
+  /* When a badge is present, the link icon follows it rather than taking the margin */
+  .project-item .pi-badge + .pi-link { margin-left: 10px; }
   .project-item .pi-dot {
     width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
     box-shadow: 0 0 0 3px rgba(20,19,52,0.04);
@@ -559,7 +572,8 @@
     .project-item { padding: 12px 14px; }
     .project-item .pi-text { font-size: 13.5px; }
     .project-item .pi-badge { display: none; }
-    .project-item:hover { transform: none; }
+    .project-item.has-link:hover { transform: none; }
+    .project-item .pi-link { opacity: 1; }
     .key-work { font-size: 13.5px; }
     .card-footer-note { font-size: 13.5px; padding: 12px 14px; }
     .skill-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -766,10 +780,10 @@ const cards = [
     ],
     listLabel: 'Platforms Delivered',
     projects: [
-      { name: 'DBEO Website', dot: 'var(--cyan)' },
-      { name: 'Talabulilm Homepage', dot: 'var(--emerald)' },
-      { name: 'Certification Module', dot: 'var(--violet)' },
-      { name: 'AQT – BS Sabaq', dot: 'var(--rose)' },
+      { name: 'DBEO Website', dot: 'var(--cyan)', url: 'https://talabulilm.com/dbeo' },
+      { name: 'Talabulilm Homepage', dot: 'var(--emerald)', url: 'https://www.talabulilm.com/' },
+      { name: 'Certification Module', dot: 'var(--violet)', url: 'https://www.talabulilm.com/certificate_module/' },
+      { name: 'AQT – BS Sabaq', dot: 'var(--rose)', url: 'https://abdulqadirtamim.com/' },
       { name: 'Online Imtihaan Webpage', dot: 'var(--amber)' },
       { name: 'Minhat Talimiyah – Old Gateway Page', dot: 'var(--blue)' },
     ],
@@ -1028,7 +1042,13 @@ cards.forEach((card, i) => {
     if (card.listLabel) content += `<div class="list-label" style="color:${card.iconColor}">${card.listLabel}</div>`;
     content += '<div class="project-list">';
     card.projects.forEach(p => {
-      content += `<div class="project-item"><div class="pi-dot" style="background:${p.dot}"></div><div class="pi-text">${p.name}</div>${p.badge ? `<div class="pi-badge">${p.badge}</div>` : ''}</div>`;
+      // A project with a `url` renders as an <a> that opens in a new tab;
+      // otherwise it stays a plain <div>.
+      const tag = p.url ? 'a' : 'div';
+      const attrs = p.url ? ` href="${p.url}" target="_blank" rel="noopener"` : '';
+      const linkIcon = p.url ? `<i class="fas fa-arrow-up-right-from-square pi-link"></i>` : '';
+      const badge = p.badge ? `<div class="pi-badge">${p.badge}</div>` : '';
+      content += `<${tag} class="project-item${p.url ? ' has-link' : ''}"${attrs}><div class="pi-dot" style="background:${p.dot}"></div><div class="pi-text">${p.name}</div>${badge}${linkIcon}</${tag}>`;
     });
     content += '</div>';
   }
